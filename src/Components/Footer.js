@@ -2,7 +2,26 @@ import { Divider, Grid, Paper, Typography } from '@mui/material'
 import React from 'react'
 
 export default function Footer() {
+    const [windowDimensions, setWindowDimensions] = React.useState({
+        height: window.innerHeight,
+        width: window.innerWidth
+      });
+    
+      React.useEffect(()=>{
+        const handleResize = () => {
+          setWindowDimensions({
+            height: window.innerHeight,
+            width: window.innerWidth
+          })
+        }
+        window.addEventListener('resize', handleResize);
+        return () => {
+          window.removeEventListener('resize',handleResize);
+        };
+      },[])
   return (
+    <div>
+      {windowDimensions.width >500 ? 
     <Paper sx={{backgroundColor:'burlywood', borderRadius:0 }}>
     <Grid container>
         <Grid item xs={1.5}>
@@ -68,6 +87,8 @@ export default function Footer() {
             </div>
 </Grid>
     </Grid>
-    </Paper>
+    </Paper> : <div><p></p> </div>
+}
+    </div>
   )
 }

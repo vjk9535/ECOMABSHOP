@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Box,AppBar, Typography, IconButton, Toolbar, InputBase, MenuItem, Divider, Button, Card, Paper, TextField } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import MenuIcon from '@mui/icons-material/Menu';
 import { styled, alpha } from '@mui/material/styles';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
@@ -13,6 +14,23 @@ function Initial() {
   const [flag, setFlag] = React.useState(false);
   const [hoveringButton, setHoveringButton] = React.useState(false);
   const [hoveringMenu, setHoveringMenu] = React.useState(false);
+  const [windowDimensions, setWindowDimensions] = React.useState({
+    height: window.innerHeight,
+    width: window.innerWidth
+  });
+
+  React.useEffect(()=>{
+    const handleResize = () => {
+      setWindowDimensions({
+        height: window.innerHeight,
+        width: window.innerWidth
+      })
+    }
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize',handleResize);
+    };
+  },[])
   const handleSignInClick=()=> {
     setShowCard(!showCard);
     console.log('handleSignInClick called')
@@ -133,6 +151,8 @@ function Initial() {
     );
   }
   return (
+    <>
+      {windowDimensions.width >= 500 ?
     <Box sx={{ flexGrow:1}}>
       <AppBar position='fixed'>
         <Toolbar>
@@ -180,7 +200,43 @@ function Initial() {
         </Toolbar>
       </AppBar>
       {showCard && <SignInCard />}
-    </Box>
+    </Box> :
+    <div>
+      <Box sx={{display:'flex',flexDirection:'row',justifyContent:'space-between', fontSize:18}}>
+            <div>
+            <Button variant='text'>
+            <MenuIcon fontSize='medium' />
+            </Button>
+            <Link to={'/'} style={{textDecoration:'none', fontStyle:'italic',fontWeight:'bold'}}>AbShopKaro</Link>
+            </div>
+            <div>
+            <Button variant='text'>
+            <AccountCircle fontSize='medium'/>&nbsp;
+            <Typography style={{textTransform:'initial'}}>Login</Typography>
+            </Button>
+            <Button variant='text'>
+              <ShoppingCart fontSize='medium'/>
+            </Button>
+            </div>
+      </Box>
+      <Box>
+      <div style={{display:'flex',justifyContent:'center'}}>
+       <Search style={{width:"100%",backgroundColor:'lightskyblue'}}>
+       <SearchIconWrapper>
+         <SearchIcon />
+       </SearchIconWrapper>
+       <StyledInputBase
+       id='search'
+         placeholder="Search for Product, Brands and More "
+         inputProps={{ 'aria-label': 'search' }}
+         fullWidth
+       />
+     </Search>
+     </div>
+     </Box>
+     </div>
+    }
+    </>
   );
 }
 

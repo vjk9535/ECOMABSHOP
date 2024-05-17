@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Box, Card,IconButton, Typography } from '@mui/material';
 import { ArrowForwardIos, KeyboardArrowUp } from '@mui/icons-material';
 import List from '../Common/List';
@@ -11,16 +11,36 @@ import { BeautyProdList } from '../Products/BeautyProdList';
 import GridList from '../Common/GridList';
 import MenuListWithSubMenu from '../Common/MenuListWithSubMenu';
 import { useNavigate } from 'react-router-dom';
+import { lightGreen } from '@mui/material/colors';
 export default function Home() {
+  
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [openFurnitures, setOpenFurnitures] = React.useState(false);
   const [openFashion, setOpenFashion] = React.useState(false);
   const [openElectronics, setOpenElectronics] = React.useState(false);
-  
+  const [windowDimensions, setWindowDimensions] = React.useState({
+    height: window.innerHeight,
+    width: window.innerWidth
+  });
+
+  useEffect(()=>{
+    const handleResize = () => {
+      setWindowDimensions({
+        height: window.innerHeight,
+        width: window.innerWidth
+      })
+    }
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize',handleResize);
+    };
+  },[])
     const isSpecialCategory = ['Furnitures', 'Fashion', 'Electronics'];
     const navigate = useNavigate();
   return (
-    <div style={{ paddingTop: "60px" }}>
+    <div>
+      {windowDimensions.width > 500 ? 
+      <div style={{ paddingTop: "60px"}}>
       {/* Start of card 1 */}
 
       <Card
@@ -164,6 +184,81 @@ export default function Home() {
   </Card>
 </div>
 {/* end of card 6 */}
+</div> : <div>
+  <Box>
+    <Card style={{width:'100%', height:150, padding:10}}>
+      Slide 1
+    </Card>
+  </Box>
+  <Box sx={{display:'flex',flexDirection:'row'}}>
+          {items.slice(1,6).map((item)=>(
+            <div>
+            <Card style={{borderRadius:100, width:55, height:55,margin:10,backgroundColor:'lightgreen'}}>
+            <img src={item.image} alt={item.text} width={75} height={75} />
+            </Card>
+            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+            <Typography fontSize={14} fontWeight={'bold'}>{item.text}</Typography>
+          </div>
+          </div>
+          ))}
+  </Box>
+  <div style={{ display: 'grid', gridTemplateColumns:'1fr 1fr 1fr',gap:3, padding:10 }}>
+  <Card style={{width:120,height:120}}></Card>
+  <Card style={{width:120,height:120}}></Card>
+  <Card style={{width:120,height:120}}></Card>
+  </div>
+  <Card style={{ margin: 20,paddingBottom:10,borderRadius:0, backgroundColor:'lightgreen'}}>
+  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '5px', fontWeight: 'bold' }}>
+    <Typography variant='h6' marginLeft={1} fontWeight="bold">Best Of Electronics</Typography>
+    <IconButton style={{ borderRadius: "50%", backgroundColor: "darkblue", color: 'white', width: '25px', height: '25px' }}>
+      <ArrowForwardIos style={{ fontSize: '15px' }} />
+    </IconButton>
+  </div>
+  <GridList ProdList={ProdList} />
+</Card>
+<div style={{borderRadius:0}}>
+<Typography variant='h6' marginLeft={1} fontWeight="bold">Sponsered Ads</Typography>
+<div style={{ display: 'grid', gridTemplateColumns:'1fr 1fr 1fr',gap:3, padding:10 }}>
+  <Card style={{width:120,height:120}}></Card>
+  <Card style={{width:120,height:120}}></Card>
+  <Card style={{width:120,height:120}}></Card>
+  </div>
+  <div style={{ display: 'grid', gridTemplateColumns:'1fr 1fr 1fr',gap:3, padding:10 }}>
+  <Card style={{width:120,height:120}}></Card>
+  <Card style={{width:120,height:120}}></Card>
+  <Card style={{width:120,height:120}}></Card>
+  </div>
+  </div>
+  <Card style={{ margin: 20,paddingBottom:10,borderRadius:0, backgroundColor:'lightcyan'}}>
+  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '5px', fontWeight: 'bold' }}>
+    <Typography variant='h6' marginLeft={1} fontWeight="bold">Best Of Electronics</Typography>
+    <IconButton style={{ borderRadius: "50%", backgroundColor: "darkblue", color: 'white', width: '25px', height: '25px' }}>
+      <ArrowForwardIos style={{ fontSize: '15px' }} />
+    </IconButton>
+  </div>
+  <GridList ProdList={ProdList} />
+</Card>
+<div>
+  <Card style={{ margin: 20,paddingBottom:10,borderRadius:0,backgroundColor:'lightgreen'}}>
+  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '5px', fontWeight: 'bold' }}>
+    <Typography variant='h6' marginLeft={1} fontWeight="bold">Beauty, Food, Toys & more</Typography>
+    <IconButton style={{ borderRadius: "50%", backgroundColor: "darkblue", color: 'white', width: '25px', height: '25px' }}>
+      <ArrowForwardIos style={{ fontSize: '15px' }} />
+    </IconButton>
+  </div>
+  <List ProdList={BeautyProdList} slide={3}/>
+</Card>
+</div>
+<Card style={{ margin: 20,paddingBottom:10,borderRadius:0, backgroundColor:'#f7b7b7'}}>
+  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '5px', fontWeight: 'bold' }}>
+    <Typography variant='h6' marginLeft={1} fontWeight="bold">Best Of Electronics</Typography>
+    <IconButton style={{ borderRadius: "50%", backgroundColor: "darkblue", color: 'white', width: '25px', height: '25px' }}>
+      <ArrowForwardIos style={{ fontSize: '15px' }} />
+    </IconButton>
+  </div>
+  <GridList ProdList={ProdList} />
+</Card>
+</div> }
       </div>
     );
   }

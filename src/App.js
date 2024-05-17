@@ -10,7 +10,6 @@ function App() {
   return (
     <div>
     <BrowserRouter>   
-    <Initial/>
     <Routes>
       <Route path='*' element={
         <>
